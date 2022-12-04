@@ -18,7 +18,7 @@ def createBox(_width, _height, _gameMap):
 
 
 #Map = createBox(20, 10)
-def createHalfBox(_width, _height, flag = 0):
+def createHalfBox(_width, _height):
 
 	roomMap = []
 	width = _width
@@ -48,11 +48,13 @@ def createHorizontalBox(_width, _height, boxMap, x, y, n, rooms):
 				gameMap[a][j] = '*'
 
 	if n > 1:
-		gameMap = createVerticalBox(_width, a, boxMap, x, 0, n-1, rooms)
+		gameMap = createVerticalBox(_width, a, boxMap, x, y, n-1, rooms)
 		gameMap = createVerticalBox(_width, _height, boxMap, x, a, n-1, rooms)
 	else:
-		rooms.append((_width, a, x, y))
-		rooms.append((_width, _height, x, a))
+		r1 = random.randint(0,3)
+		r2 = random.randint(0,3)
+		rooms.append((_width, a, x, y,r1))
+		rooms.append((_width, _height, x, a,r2))
 	return gameMap, rooms
 
 def createVerticalBox(_width, _height, boxMap, x, y, n, rooms):
@@ -70,11 +72,13 @@ def createVerticalBox(_width, _height, boxMap, x, y, n, rooms):
 		i[a] = '*'
 
 	if n > 1:
-		gameMap = createHorizontalBox(a, _height, boxMap, 0, y, n-1, rooms)
+		gameMap = createHorizontalBox(a, _height, boxMap, x, y, n-1, rooms)
 		gameMap = createHorizontalBox(_width, _height, boxMap, a, y, n-1, rooms)
 	else:
-		rooms.append((a, _height, x, y))
-		rooms.append((_width, _height, a, y))
+		r1 = random.randint(0,3)
+		r2 = random.randint(0,3)
+		rooms.append((a, _height, x, y,r1))
+		rooms.append((_width, _height, a, y,r2))
 
 	return gameMap, rooms
 
@@ -94,10 +98,10 @@ def createDungeon(_width, _height, _n):
 
 	gameMap, rooms = createVerticalBox(width, height, gameMap, 0, 0, _n, rooms)
 
-	print(rooms)
+	#print(rooms)
 
 	for cnt in range(len(rooms)):
-		rooms[cnt] = (rooms[cnt][0] - 2, rooms[cnt][1] - 2, rooms[cnt][2] + 1, rooms[cnt][3] + 1)
+		rooms[cnt] = (rooms[cnt][0] - 2, rooms[cnt][1] - 2, rooms[cnt][2] + 1, rooms[cnt][3] + 1, rooms[cnt][4])
 
 	print(rooms)
 	

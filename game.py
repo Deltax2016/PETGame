@@ -32,7 +32,7 @@ def createHalfBox(_width, _height, flag = 0):
 
 	return roomMap
 
-def createHorizontalBox(_width, _height, boxMap, x, y, n):
+def createHorizontalBox(_width, _height, boxMap, x, y, n, rooms):
 	print('hor',_width, _height, x, y, n)
 	gameMap = boxMap
 	width = _width
@@ -48,12 +48,14 @@ def createHorizontalBox(_width, _height, boxMap, x, y, n):
 				gameMap[a][j] = '*'
 
 	if n > 1:
-		gameMap = createVerticalBox(_width, a, boxMap, x, 0, n-1 )
-		gameMap = createVerticalBox(_width, _height, boxMap, x, a, n-1)
+		gameMap = createVerticalBox(_width, a, boxMap, x, 0, n-1, rooms)
+		gameMap = createVerticalBox(_width, _height, boxMap, x, a, n-1, rooms)
+	else:
+		rooms.append((_width, a, x, y))
+		rooms.append((_width, _height, x, a))
+	return gameMap, rooms
 
-	return gameMap
-
-def createVerticalBox(_width, _height, boxMap, x, y, n):
+def createVerticalBox(_width, _height, boxMap, x, y, n, rooms):
 	print('vert',_width, _height, x, y, n)
 	gameMap = boxMap
 	width = _width
@@ -68,15 +70,19 @@ def createVerticalBox(_width, _height, boxMap, x, y, n):
 		i[a] = '*'
 
 	if n > 1:
-		gameMap = createHorizontalBox(a, _height, boxMap, 0, y, n-1)
-		gameMap = createHorizontalBox(_width, _height, boxMap, a, y, n-1)
+		gameMap = createHorizontalBox(a, _height, boxMap, 0, y, n-1, rooms)
+		gameMap = createHorizontalBox(_width, _height, boxMap, a, y, n-1, rooms)
+	else:
+		rooms.append((a, _height, x, y))
+		rooms.append((_width, _height, a, y))
 
-	return gameMap
+	return gameMap, rooms
 
 
 def createDungeon(_width, _height, _n):
 
 	gameMap = []
+	rooms = []
 	width = _width
 	height = _height
 
@@ -86,8 +92,15 @@ def createDungeon(_width, _height, _n):
 			line.append(' ')
 		gameMap.append(line)
 
-	gameMap = createVerticalBox(width, height, gameMap, 0, 0, _n)
+	gameMap, rooms = createVerticalBox(width, height, gameMap, 0, 0, _n, rooms)
+
+	print(rooms)
+
+	for cnt in range(len(rooms)):
+		rooms[cnt] = (rooms[cnt][0] - 2, rooms[cnt][1] - 2, rooms[cnt][2] + 1, rooms[cnt][3] + 1)
+
+	print(rooms)
 	
-	return gameMap
+	return gameMap, rooms
 
 
